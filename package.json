@@ -19,7 +19,8 @@
     "node": ">= 0.8.0"
   },
   "dependencies": {
-    "grunt": "~0.4.1"
+    "grunt": "~0.4.1",
+    "jscoverage": "git+ssh://git@github.com:michaeljacobdavis/jscoverage.git#v0.3.8-fix"
   },
   "devDependencies": {
     "grunt": "~0.4.1"
@@ -27,7 +28,7 @@
   "peerDependencies": {
     "grunt": "~0.4.1"
   },
-    "keywords": [
+  "keywords": [
     "gruntplugin",
     "jscoverage",
     "code coverage",

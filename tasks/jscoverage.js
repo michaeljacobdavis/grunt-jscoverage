@@ -1,37 +1,27 @@
 "use strict";
 
 module.exports = function(grunt) {
-  grunt.registerTask("jscoverage", "Grunt task for jscoverage; which will parse your source code and generate an instrumented version allowing testing tools to generate code coverage reports", function() {
+    grunt.registerTask("jscoverage", "Grunt task for jscoverage; which will parse your source code and generate an instrumented version allowing testing tools to generate code coverage reports", function() {
 
-  var done = this.async();
-  var options = this.options();
+        var options = this.options();
 
-  if (grunt.file.exists(options.outputDirectory)) grunt.file.delete(options.outputDirectory);
+        var jscoverage = require('jscoverage');
+        var source = options.inputDirectory;
+        var dest = options.outputDirectory;
+        var exclude = options.exclude;
 
-  var args2 = [];
-  args2.push(options.inputDirectory);
-  args2.push(options.outputDirectory);
+        if (!source) {
+            grunt.log.error('Source is required');
+        }
 
-  if (!options.highlight) args2.push('--no-highlight');
-  if (options.exclude) args2.push('--exclude=' + options.exclude);
-  if (options.encoding) args2.push('--encoding=' + options.encoding);
-  if (options.noInstrument) args2.push('--no-instrument=' + options.noInstrument);
-  if (options.jsVersion) args2.push('--js-version=' + options.jsVersion);
+        if (!dest) {
+            if (/\.\w+$/.test(source)) {
+                dest = source.replace(/(\.\w+)$/, '-cov$1');
+            } else {
+                dest = source + '-cov';
+            }
+        }
 
-  grunt.util.spawn({
-      cmd: 'jscoverage',
-      args: args2,
-      opts: {
-        stdio: 'inherit'
-      }
-    },
-    function (error, result) {
-      if (error) {
-        grunt.log.error(result.stderr);
-        done(false);
-      }
-      grunt.log.writeln(result.stdout);
-      done();
+        jscoverage.processFile(source, dest, exclude, {});
     });
-  });
 };
